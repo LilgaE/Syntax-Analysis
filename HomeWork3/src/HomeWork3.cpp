@@ -71,7 +71,7 @@ bool SyntaxAnalyzer::parse(){
     if (vdec()){
         if (tokitr!=tokens.end() && *tokitr=="t_main"){
             tokitr++; lexitr++;
-            if (tokitr!=tokens.end() && stmtlist()){
+            if (tokitr!=tokens.end() && stmtlist()){//double check end
             	if (tokitr!=tokens.end()) // should be at end token
                 	if (*tokitr == "t_end"){
                 		tokitr++; lexitr++;
@@ -106,7 +106,7 @@ bool SyntaxAnalyzer::parse(){
 }
 
 bool SyntaxAnalyzer::vdec(){
-
+	//test end
     if (*tokitr != "t_var")
         return true;
     else{
@@ -204,6 +204,32 @@ int SyntaxAnalyzer::stmt(){  // returns 1 or 2 if valid, 0 if invalid
 }
 
 bool SyntaxAnalyzer::ifstmt(){
+	if (tokitr == tokens.end())//test after every itarator
+		return false;
+	if(*tokitr != "s_lparen")
+		return false;
+	tokitr++; lexitr++;
+	if(!expr())
+		return false;
+	tokitr++; lexitr++;
+	if(*tokitr != "s_rparen" || tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
+	if(*tokitr != "t_then" || tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
+	if(!stmtlist())
+		return false;
+	tokitr++; lexitr++;
+	if(!elsepart())
+		return false;
+	tokitr++; lexitr++;
+	if(*tokitr != "t_end"|| tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
+	if(*tokitr != "t_if"|| tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
 	return true;
     // we will write this together in class
 }
@@ -220,14 +246,46 @@ bool SyntaxAnalyzer::elsepart(){
 }
 
 bool SyntaxAnalyzer::whilestmt(){
+	if (tokitr == tokens.end())//test after every itarator
+		return false;
+	if(*tokitr != "s_lparen")
+		return false;
+	tokitr++; lexitr++;
+	if(!expr())
+		return false;
+	tokitr++; lexitr++;
+	if(*tokitr != "s_rparen" || tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
+	if(*tokitr != "t_loop" || tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
+	if(!stmtlist())
+		return false;
+	tokitr++; lexitr++;
+	if(*tokitr != "t_end"|| tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
+	if(*tokitr != "t_loop"|| tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
 	return true;
-	// write this function
 }
 
 bool SyntaxAnalyzer::assignstmt(){
+	if(*tokitr != "t_id" || tokitr == tokens.end())
+			return false;
+		tokitr++; lexitr++;
+	if(*tokitr != "s_assign" || tokitr == tokens.end())
+		return false;
+	tokitr++; lexitr++;
+	if(!expr())
+		return false;
+	tokitr++; lexitr++;
 	return true;
     // write this function
 }
+
 bool SyntaxAnalyzer::inputstmt(){
     if (*tokitr == "s_lparen"){
         tokitr++; lexitr++;
@@ -266,6 +324,7 @@ bool SyntaxAnalyzer::expr(){
 bool SyntaxAnalyzer::simpleexpr(){
 	return true;
     // write this function
+	//not moving iterators
 }
 
 bool SyntaxAnalyzer::term(){
@@ -343,3 +402,11 @@ int main(){
     sa.parse();
     return 1;
 }
+
+
+//derefence ----> is not null
+//if invaled still finish
+//FIX THE CODE DO NOT CHANGE STRUTURE
+//if you change something put your by it
+//doesnt all have to be the same
+//get everything to work
