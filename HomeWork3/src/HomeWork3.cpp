@@ -287,11 +287,11 @@ bool SyntaxAnalyzer::assignstmt(){
 }
 
 bool SyntaxAnalyzer::inputstmt(){
-    if (*tokitr == "s_lparen"){
+    if (*tokitr == "s_lparen" || tokitr == tokens.end()){ //ADDED tokens.end test
         tokitr++; lexitr++;
-        if (*tokitr == "t_id"){
+        if (*tokitr == "t_id"|| tokitr == tokens.end()){//ADDED tokens.end test
             tokitr++; lexitr++;
-            if (*tokitr == "s_rparen"){
+            if (*tokitr == "s_rparen"|| tokitr == tokens.end()){//ADDED tokens.end test
                 tokitr++; lexitr++;
                 return true;
             }
@@ -301,8 +301,19 @@ bool SyntaxAnalyzer::inputstmt(){
 }
 
 bool SyntaxAnalyzer::outputstmt(){
-	return true;
-	// write this function
+	if(*tokitr == "t_output" && tokitr != tokens.end()){
+			tokitr++; lexitr++;
+		if(*tokitr == "s_lparen" && tokitr != tokens.end()){
+			tokitr++; lexitr++;
+			if(expr() || (*tokitr == "t_string" && tokitr != tokens.end())){
+				tokitr++; lexitr++;
+				if(*tokitr == "s_rparen" && tokitr != tokens.end()){
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
 
 bool SyntaxAnalyzer::expr(){
@@ -322,9 +333,19 @@ bool SyntaxAnalyzer::expr(){
 }
 
 bool SyntaxAnalyzer::simpleexpr(){
-	return true;
-    // write this function
-	//not moving iterators
+	if (term()){
+		if (arithop() || relop()){
+			if (term())
+				return true;
+			else
+				return false;
+			}
+			else
+				return true;
+		}
+		else{
+			return false;
+		}
 }
 
 bool SyntaxAnalyzer::term(){
