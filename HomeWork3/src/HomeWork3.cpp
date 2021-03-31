@@ -75,7 +75,6 @@ bool SyntaxAnalyzer::parse(){
             	if (tokitr!=tokens.end()) // should be at end token
                 	if (*tokitr == "t_end"){
                 		tokitr++; lexitr++;
-                		cout << "test" << endl;
                 		if (tokitr==tokens.end()){  // end was last thing in file
                 			cout << "Valid source code file" << endl;
                 			return true;
@@ -205,6 +204,8 @@ int SyntaxAnalyzer::stmt(){  // returns 1 or 2 if valid, 0 if invalid
 }
 
 bool SyntaxAnalyzer::ifstmt(){
+	//pre: null
+	//post: False if the if statement is invalid and true if statement is valid
 	if (tokitr == tokens.end())//test after every itarator
 		return false;
 	if(*tokitr != "s_lparen")
@@ -247,6 +248,8 @@ bool SyntaxAnalyzer::elsepart(){
 }
 
 bool SyntaxAnalyzer::whilestmt(){
+	//pre: null
+	//post: False if the while statement is invalid and true if statement is valid
 	if (tokitr == tokens.end())//test after every itarator
 		return false;
 	if(*tokitr != "s_lparen")
@@ -274,6 +277,8 @@ bool SyntaxAnalyzer::whilestmt(){
 }
 
 bool SyntaxAnalyzer::assignstmt(){
+	//pre: null
+	//post: Returns true if valid assingment, returns false if invalid
 	if(*tokitr != "t_id" || tokitr == tokens.end())
 			return false;
 	tokitr++; lexitr++;
