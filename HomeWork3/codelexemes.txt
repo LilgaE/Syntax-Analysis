@@ -13,10 +13,10 @@ s_rparen:)
 s_semi:;
 t_if:if
 s_lparen (
-s_lparen (
 t_int:5
 s_plus:+
 t_int:7
 s_rparen )
-s_rparen )
+t_end:end
+t_if:if
 t_end:end

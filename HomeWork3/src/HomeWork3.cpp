@@ -75,6 +75,7 @@ bool SyntaxAnalyzer::parse(){
             	if (tokitr!=tokens.end()) // should be at end token
                 	if (*tokitr == "t_end"){
                 		tokitr++; lexitr++;
+                		cout << "test" << endl;
                 		if (tokitr==tokens.end()){  // end was last thing in file
                 			cout << "Valid source code file" << endl;
                 			return true;
@@ -107,7 +108,7 @@ bool SyntaxAnalyzer::parse(){
 
 bool SyntaxAnalyzer::vdec(){
 	//test end
-    if (*tokitr != "t_var")
+    if (tokitr != tokens.end() && *tokitr != "t_var") //ADDED tokens.end test
         return true;
     else{
         tokitr++; lexitr++;
@@ -130,16 +131,16 @@ bool SyntaxAnalyzer::vdec(){
 int SyntaxAnalyzer::vars(){
     int result = 0;  // 0 - valid, 1 - done, 2 - error
     string temp;
-    if (*tokitr == "t_integer"){
+    if (tokitr != tokens.end() && *tokitr == "t_integer"){//ADDED tokens.end test
         temp = "t_integer";
         tokitr++; lexitr++;
     }
-    else if (*tokitr == "t_string"){
+    else if (tokitr != tokens.end() && *tokitr == "t_string"){//ADDED tokens.end test
         temp = "t_string";
         tokitr++; lexitr++;
     }
     else
-        return 1;
+        return 2; //Changed retrun to 2
     bool semihit = false;
     while (tokitr != tokens.end() && result == 0 && !semihit){
         if (*tokitr == "t_id"){
@@ -235,7 +236,7 @@ bool SyntaxAnalyzer::ifstmt(){
 }
 
 bool SyntaxAnalyzer::elsepart(){
-    if (*tokitr == "t_else"){
+    if (*tokitr == "t_else"){//Added token end test
         tokitr++; lexitr++;
         if (stmtlist())
             return true;
@@ -275,7 +276,7 @@ bool SyntaxAnalyzer::whilestmt(){
 bool SyntaxAnalyzer::assignstmt(){
 	if(*tokitr != "t_id" || tokitr == tokens.end())
 			return false;
-		tokitr++; lexitr++;
+	tokitr++; lexitr++;
 	if(*tokitr != "s_assign" || tokitr == tokens.end())
 		return false;
 	tokitr++; lexitr++;
@@ -318,18 +319,18 @@ bool SyntaxAnalyzer::outputstmt(){
 
 bool SyntaxAnalyzer::expr(){
     if (simpleexpr()){
-	if (logicop()){
-		if (simpleexpr())
-			return true;
-		else
-			return false;
+    	if (logicop()){
+    		if (simpleexpr())
+    			return true;
+    		else
+    			return false;
 	}
-	else
-		return true;
+    	else
+    		return true;
     }
-    else{
+    else
 	return false;
-    }
+
 }
 
 bool SyntaxAnalyzer::simpleexpr(){
@@ -340,18 +341,15 @@ bool SyntaxAnalyzer::simpleexpr(){
 			else
 				return false;
 			}
-			else
-				return true;
+		else
+			return true;
 		}
-		else{
-			return false;
-		}
+	else
+		return false;
 }
 
 bool SyntaxAnalyzer::term(){
-    if ((*tokitr == "t_int")
-	|| (*tokitr == "t_str")
-	|| (*tokitr == "t_id")){
+    if ((*tokitr == "t_int") || (*tokitr == "t_str") || (*tokitr == "t_id")){
     	tokitr++; lexitr++;
     	return true;
     }
@@ -359,7 +357,7 @@ bool SyntaxAnalyzer::term(){
         if (*tokitr == "s_lparen"){
             tokitr++; lexitr++;
             if (expr())
-                if (*tokitr == "s_rparen"){
+                if (tokitr != tokens.end() && *tokitr == "s_rparen"){
                     tokitr++; lexitr++;
                     return true;
                 }
