@@ -307,13 +307,13 @@ bool SyntaxAnalyzer::inputstmt(){
 }
 
 bool SyntaxAnalyzer::outputstmt(){
-	if(*tokitr == "t_output" && tokitr != tokens.end()){
+	if(*tokitr == "t_output" && tokitr != tokens.end()){ //ADDED tokens.end test
 			tokitr++; lexitr++;
-		if(*tokitr == "s_lparen" && tokitr != tokens.end()){
+		if(*tokitr == "s_lparen" && tokitr != tokens.end()){ //ADDED tokens.end test
 			tokitr++; lexitr++;
-			if(expr() || (*tokitr == "t_string" && tokitr != tokens.end())){
+			if(expr() || (*tokitr == "t_string" && tokitr != tokens.end())){ //ADDED tokens.end test
 				tokitr++; lexitr++;
-				if(*tokitr == "s_rparen" && tokitr != tokens.end()){
+				if(*tokitr == "s_rparen" && tokitr != tokens.end()){ //ADDED tokens.end test
 					return true;
 				}
 			}
